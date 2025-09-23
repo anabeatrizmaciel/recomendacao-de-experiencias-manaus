@@ -1,0 +1,31 @@
+id,nome,categoria,localizacao,preco_estimado
+1,Teatro Amazonas,Cultura,Centro,Alto
+2,MUSA - Museu da Amazônia,Cultura,Zona Norte,Médio
+3,Vista Rio Café - Matriz,Gastronomia,Zona Sul,Médio
+4,Feira do Artesanato da Ponta Negra,Cultura,Zona Sul,Baixo
+5,Amazônico Peixaria Regional,Gastronomia,Zona Norte,Médio
+6,Bar do Armando,Gastronomia,Centro,Baixo
+7,Encontro das Águas,Natureza,Zona Norte,Alto
+8,Palácio Rio Negro,Cultura,Centro,Baixo
+9,Estádio da Colina,Lazer,Zona Oeste,Baixo
+10,Orla do Amarelinho,Lazer,Zona Leste,Baixo
+11,Shopping Ponta Negra,Lazer,Zona Sul,Alto
+12,Shopping Manauara,Lazer,Zona Norte,Alto
+13,Shopping Amazonas,Lazer,Zona Norte,Alto
+14,Porto de Manaus,História,Centro,Baixo
+15,Centro Cultural Povos da Amazônia,Cultura,Zona Norte,Médio
+16,Zoológico do CIGS,Natureza,Zona Norte,Baixo
+17,Bosque da Ciência,Natureza,Zona Norte,Médio
+18,Parque Jefferson Péres,Lazer,Centro,Baixo
+19,Millennium Shopping,Lazer,Zona Norte,Médio
+20,Restaurante Banzeiro,Gastronomia,Zona Norte,Alto
+21,Arena da Amazônia,Lazer,Zona Norte,Alto
+22,Museu do Seringal,Cultura,Zona Norte,Médio
+23,Restaurante Tambaqui de Banda,Gastronomia,Centro,Médio
+24,Restaurante Choupana,Gastronomia,Zona Norte,Alto
+25,Praia da Ponta Negra,Natureza,Zona Sul,Gratuito
+26,Praia do Tupé,Natureza,Zona Norte,Gratuito
+27,Restaurante Peixaria Morongueta,Gastronomia,Zona Sul,Médio
+28,Restaurante O Lenhador,Gastronomia,Zona Norte,Alto
+29,Peixaria Bibi,Gastronomia,Zona Leste,Médio
+30,Igreja de São Sebastião,Cultura,Centro,Baixo
