@@ -2,15 +2,25 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 import pandas as pd
 import numpy as np
+import os
 
 app = FastAPI()
 
-# Carregar datasets
-itens = pd.read_csv("backend/itens.csv")
-avaliacoes = pd.read_csv("backend/avaliacoes.csv")
+# Caminho dos arquivos
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+ITENS_PATH = os.path.join(BASE_DIR, "itens.csv")
+AVALIACOES_PATH = os.path.join(BASE_DIR, "avaliacoes.csv")
+AVALIACOES_TEMP_PATH = os.path.join(BASE_DIR, "avaliacoes_temp.csv")
 
-# Guardar avaliações temporárias
-avaliacoes_temp = pd.DataFrame(columns=avaliacoes.columns)
+# Carregar datasets
+itens = pd.read_csv(ITENS_PATH)
+avaliacoes = pd.read_csv(AVALIACOES_PATH)
+
+# Carregar avaliações temporárias salvas, se existir
+if os.path.exists(AVALIACOES_TEMP_PATH):
+    avaliacoes_temp = pd.read_csv(AVALIACOES_TEMP_PATH)
+else:
+    avaliacoes_temp = pd.DataFrame(columns=avaliacoes.columns)
 
 class RecomendacaoRequest(BaseModel):
     usuario_id: int
@@ -29,12 +39,31 @@ def cosine_similarity(u, v):
     den = np.linalg.norm(u) * np.linalg.norm(v)
     return num / den if den != 0 else 0
 
+# Endpoint raiz
+@app.get("/")
+def root():
+    return {"mensagem": "API do Manaus Explorer está rodando 🚀. Use /docs para ver os endpoints."}
+
 # Endpoint para adicionar avaliação simulada
 @app.post("/avaliar")
 def avaliar(av: AvaliacaoSimulada):
     global avaliacoes_temp
-    avaliacoes_temp = pd.concat([avaliacoes_temp, pd.DataFrame([av.dict()])], ignore_index=True)
+    nova_av = pd.DataFrame([av.dict()])
+    avaliacoes_temp = pd.concat([avaliacoes_temp, nova_av], ignore_index=True)
+
+    # ✅ salvar no CSV sempre que adicionar
+    avaliacoes_temp.to_csv(AVALIACOES_TEMP_PATH, index=False)
+
     return {"mensagem": f"Avaliação do usuário {av.usuario_id} para item {av.item_id} adicionada."}
+
+# Endpoint para listar avaliações simuladas
+@app.get("/avaliacoes")
+def listar_avaliacoes():
+    global avaliacoes_temp
+    return {
+        "avaliacoes_originais": len(avaliacoes),
+        "avaliacoes_simuladas": avaliacoes_temp.to_dict(orient="records")
+    }
 
 # Função de recomendação
 def recomendar(req: RecomendacaoRequest):
@@ -56,6 +85,9 @@ def recomendar(req: RecomendacaoRequest):
 
     vizinhos = [u for u, s in sorted(similaridades.items(), key=lambda x: x[1], reverse=True)[:3] if s > 0]
 
+    if not vizinhos:
+        return {"recomendacoes": [], "explicacao": "Não encontramos usuários semelhantes."}
+
     notas_preditas = matriz.loc[vizinhos].mean().sort_values(ascending=False)
     avaliados = set(matriz_av[matriz_av.usuario_id == req.usuario_id].item_id)
     candidatos = [i for i in notas_preditas.index if i not in avaliados]
@@ -63,7 +95,7 @@ def recomendar(req: RecomendacaoRequest):
     df_candidatos = itens[itens.id.isin(candidatos)]
 
     if req.localizacao:
-        df_candidatos = df_candidatos[df_candidatos.localizacao.str.contains(req.localizacao, case=False)]
+        df_candidatos = df_candidatos[df_candidatos.localizacao.fillna("").str.contains(req.localizacao, case=False)]
     if req.preco_estimado:
         df_candidatos = df_candidatos[df_candidatos.preco_estimado.str.lower() == req.preco_estimado.lower()]
 
