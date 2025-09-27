@@ -1,31 +1,31 @@
-id,nome,categoria,localizacao,preco_estimado
-1,Teatro Amazonas,Cultura,Centro,Alto
-2,MUSA - Museu da Amazônia,Cultura,Zona Norte,Médio
-3,Vista Rio Café - Matriz,Gastronomia,Zona Sul,Médio
-4,Feira do Artesanato da Ponta Negra,Cultura,Zona Sul,Baixo
-5,Amazônico Peixaria Regional,Gastronomia,Zona Norte,Médio
-6,Bar do Armando,Gastronomia,Centro,Baixo
-7,Encontro das Águas,Natureza,Zona Norte,Alto
-8,Palácio Rio Negro,Cultura,Centro,Baixo
-9,Estádio da Colina,Lazer,Zona Oeste,Baixo
-10,Orla do Amarelinho,Lazer,Zona Leste,Baixo
-11,Shopping Ponta Negra,Lazer,Zona Sul,Alto
-12,Shopping Manauara,Lazer,Zona Norte,Alto
-13,Shopping Amazonas,Lazer,Zona Norte,Alto
-14,Porto de Manaus,História,Centro,Baixo
-15,Centro Cultural Povos da Amazônia,Cultura,Zona Norte,Médio
-16,Zoológico do CIGS,Natureza,Zona Norte,Baixo
-17,Bosque da Ciência,Natureza,Zona Norte,Médio
-18,Parque Jefferson Péres,Lazer,Centro,Baixo
-19,Millennium Shopping,Lazer,Zona Norte,Médio
-20,Restaurante Banzeiro,Gastronomia,Zona Norte,Alto
-21,Arena da Amazônia,Lazer,Zona Norte,Alto
-22,Museu do Seringal,Cultura,Zona Norte,Médio
-23,Restaurante Tambaqui de Banda,Gastronomia,Centro,Médio
-24,Restaurante Choupana,Gastronomia,Zona Norte,Alto
-25,Praia da Ponta Negra,Natureza,Zona Sul,Gratuito
-26,Praia do Tupé,Natureza,Zona Norte,Gratuito
-27,Restaurante Peixaria Morongueta,Gastronomia,Zona Sul,Médio
-28,Restaurante O Lenhador,Gastronomia,Zona Norte,Alto
-29,Peixaria Bibi,Gastronomia,Zona Leste,Médio
-30,Igreja de São Sebastião,Cultura,Centro,Baixo
+id,nome,categoria,localizacao,preco_estimado,latitude, longitude
+1,Teatro Amazonas,Cultura,Centro,Alto,-3.130147481958336, -60.023396786044955
+2,MUSA - Museu da Amazônia,Cultura,Zona Norte,Médio,-3.0069104453776383, -59.94000502029345
+3,Vista Rio Café - Matriz,Gastronomia,Zona Sul,Médio,-3.072754926830032, -60.090306102395665
+4,Feira do Artesanato da Ponta Negra,Cultura,Zona Sul,Baixo,-5.869916569728959, -35.18141709499931
+5,Amazônico Peixaria Regional,Gastronomia,Zona Norte,Médio,-3.091773039993668, -60.01974400495021
+6,Bar do Armando,Gastronomia,Centro,Baixo,-3.1295453246544738, -60.022248191456775
+7,Encontro das Águas,Natureza,Zona Norte,Alto,-3.1355527713614952, -59.90506540076838
+8,Palácio Rio Negro,Cultura,Centro,Baixo,-3.1348280901090226, -60.016975935635024
+9,Estádio da Colina,Lazer,Zona Oeste,Baixo,-3.121511090178539, -60.037314204949844
+10,Orla do Amarelinho,Lazer,Zona Leste,Baixo,-3.143982681149744, -60.01337531659335
+11,Shopping Ponta Negra,Lazer,Zona Sul,Alto,-3.0844198177431315, -60.07250223563541
+12,Shopping Manauara,Lazer,Zona Norte,Alto,-3.1035532479807513, -60.013576120292555
+13,Shopping Amazonas,Lazer,Zona Norte,Alto,-3.0938791801516996, -60.02265168960769
+14,Porto de Manaus,História,Centro,Baixo,-3.136564190534102, -60.02591073563489
+15,Centro Cultural Povos da Amazônia,Cultura,Zona Norte,Médio,-3.1328690875939817, -59.9874181
+16,Zoológico do CIGS,Natureza,Zona Norte,Baixo,-3.101720582048293, -60.04491907426503
+17,Bosque da Ciência,Natureza,Zona Norte,Médio,-3.097159201973236, -59.98776908960759
+18,Parque Jefferson Péres,Lazer,Centro,Baixo,-3.137336441736295, -60.01594957426485
+19,Millennium Shopping,Lazer,Zona Norte,Médio,-3.1006910424201597, -60.02441500310068
+20,Restaurante Banzeiro,Gastronomia,Zona Norte,Alto,-3.1120242585251137, -60.01686103193625
+21,Arena da Amazônia,Lazer,Zona Norte,Alto,-3.083042144063356, -60.02820357796416
+22,Museu do Seringal,Cultura,Zona Norte,Médio,-3.0096193162183145, -60.17554770680059
+23,Restaurante Tambaqui de Banda,Gastronomia,Centro,Médio,-3.130778840400171, -60.02270468960729
+24,Restaurante Choupana,Gastronomia,Zona Norte,Alto,-3.1084574097771087, -60.01299510495016
+25,Praia da Ponta Negra,Natureza,Zona Sul,Gratuito,-3.063650748766583, -60.10384620837243
+26,Praia do Tupé,Natureza,Zona Norte,Gratuito,-3.045793099492554, -60.25328110303692
+27,Restaurante Peixaria Morongueta,Gastronomia,Zona Sul,Médio,-3.0822480092491373, -60.05647039075171
+28,Restaurante O Lenhador,Gastronomia,Zona Norte,Alto,-3.045798764373344, -60.074734231936766
+29,Peixaria Bibi,Gastronomia,Zona Leste,Médio,-3.142177006244946, -60.01564040494971
+30,Igreja de São Sebastião,Cultura,Centro,Baixo,-3.128865595961839, -60.02267681608966
