@@ -4,10 +4,56 @@ import pandas as pd
 import folium
 from streamlit_folium import st_folium
 from folium.plugins import MeasureControl
-
+import plotly.express as px
 
 st.set_page_config(page_title="Manaus Explorer", page_icon="🌴", layout="wide")
 API = "http://127.0.0.1:8000"
+
+# ------------------- CSS customizado -------------------
+st.markdown(
+    """
+    <style>
+    .stApp {
+        background: linear-gradient(to bottom right, #E8F5E9, #F1F8E9);
+    }
+
+    h1, h2, h3 {
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    div.stButton > button {
+        background: linear-gradient(to right, #2E7D32, #388E3C);
+        color: white;
+        border-radius: 10px;
+        border: none;
+        font-weight: bold;
+        transition: 0.3s;
+    }
+    div.stButton > button:hover {
+        transform: scale(1.05);
+        background: linear-gradient(to right, #1B5E20, #2E7D32);
+    }
+
+    .recs-card {
+        background: white;
+        border-radius: 14px;
+        padding: 18px;
+        margin-bottom: 14px;
+        box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        transition: 0.2s;
+    }
+    .recs-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 4px 4px 14px rgba(0,0,0,0.15);
+    }
+
+    section[data-testid="stSidebar"] {
+        background: #A5D6A7;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
 
 st.markdown(
     "<h1 style='text-align:center;color:#2E8B57'>Recomendador de Experiências Locais em Manaus 🌴</h1>",
@@ -60,7 +106,10 @@ localizacao = st.sidebar.selectbox("Localização (opcional):", ["", "Centro", "
 preco = st.sidebar.selectbox("Faixa de preço (opcional):", ["", "Baixo", "Médio", "Alto"])
 
 mode_radio = st.sidebar.radio(
-    "Seções", ["✨ Recomendações", "🗺️ Mapa"], index=0 if st.session_state["mode"] == "✨ Recomendações" else 1
+    "Seções",
+    ["✨ Recomendações", "🗺️ Mapa", "📊 Análises"],
+    index=["✨ Recomendações", "🗺️ Mapa", "📊 Análises"].index(st.session_state["mode"])
+    if st.session_state["mode"] in ["✨ Recomendações", "🗺️ Mapa", "📊 Análises"] else 0
 )
 if mode_radio != st.session_state["mode"]:
     st.session_state["mode"] = mode_radio
@@ -107,7 +156,6 @@ if st.sidebar.button("Gerar Recomendações"):
     except requests.exceptions.RequestException as e:
         st.error(f"Erro ao gerar recomendações: {e}")
 
-
 if st.session_state["mode"] == "✨ Recomendações":
     recs = st.session_state["recs"] or []
     if recs:
@@ -119,13 +167,7 @@ if st.session_state["mode"] == "✨ Recomendações":
             with cols[idx % 2]:
                 st.markdown(
                     f"""
-                    <div style="background:linear-gradient(to right,#B2DFDB,#E0F2F1);padding:15px;border-radius:14px;margin-bottom:10px;box-shadow:3px 3px 7px #B2DFDB;">
-                        <h3 style="color:#00695C;margin:0 0 10px 0;">{idx+1}. {icone} {item.get('nome','')}</h3>
-                        <p style="margin:0;"><strong>Categoria:</strong> {item.get('categoria','')}</p>
-                        <p style="margin:0;"><strong>Localização:</strong> {item.get('localizacao','')}</p>
-                        <p style="margin:0;"><strong>Preço estimado:</strong> {item.get('preco_estimado','N/D')}</p>
-                    </div>
-                    """,
+                    <div class=\"recs-card\">\n                        <h3 style=\"color:#2E7D32;margin:0 0 8px 0;\">{idx+1}. {icone} {item.get('nome','')}</h3>\n                        <p><strong>📌 Categoria:</strong> {item.get('categoria','')}</p>\n                        <p><strong>📍 Localização:</strong> {item.get('localizacao','')}</p>\n                        <p><strong>💰 Preço estimado:</strong> {item.get('preco_estimado','N/D')}</p>\n                    </div>\n                    """,
                     unsafe_allow_html=True,
                 )
 
@@ -136,7 +178,7 @@ if st.session_state["mode"] == "✨ Recomendações":
                         st.session_state["map_focus"] = {
                             "lat": float(latlon[0]),
                             "lon": float(latlon[1]),
-                            "label": f"{item.get('nome','')} • {item.get('localizacao','')}",
+                            "label": f"{item.get('nome','')} • {item.get('localizacao','')}"
                         }
                         st.session_state["mode"] = "🗺️ Mapa"
                         st.rerun()
@@ -147,7 +189,6 @@ if st.session_state["mode"] == "✨ Recomendações":
             st.write(st.session_state["explicacao"])
     else:
         st.info("Use a barra lateral para gerar recomendações.")
-
 
 elif st.session_state["mode"] == "🗺️ Mapa":
     st.subheader("Mapa de Manaus")
@@ -161,14 +202,7 @@ elif st.session_state["mode"] == "🗺️ Mapa":
         center = [-3.1190, -60.0217]  
         zoom = 11
 
-    m = folium.Map(location=center, zoom_start=zoom, tiles=None, control_scale=True)
-    folium.TileLayer(
-        tiles="https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-        name="OpenStreetMap",
-        attr="© OpenStreetMap contributors",
-        control=True,
-        max_zoom=19,
-    ).add_to(m)
+    m = folium.Map(location=center, zoom_start=zoom, tiles="CartoDB positron", control_scale=True)
     MeasureControl(position="topleft", primary_length_unit="kilometers").add_to(m)
 
     df_map = itens_df.copy()
@@ -191,13 +225,66 @@ elif st.session_state["mode"] == "🗺️ Mapa":
         st.session_state["mode"] = "✨ Recomendações"
         st.rerun()
 
+    st_folium(m, height=620, use_container_width=True, returned_objects=[], key=f"mapa_{hash(str(center))}")
+
+elif st.session_state["mode"] == "📊 Análises":
+    st.subheader("📊 Análises do Sistema")
+
     try:
-        st_folium(m, height=620, use_container_width=True, returned_objects=[], key=f"mapa_{hash(str(center))}")
-    except Exception:
-        components.html(m.get_root().render(), height=620, scrolling=False)
+        resp_cat = requests.get(f"{API}/categorias", timeout=8)
+        resp_cat.raise_for_status()
+        data_cat = resp_cat.json()
+
+        if data_cat:
+            df_cat = pd.DataFrame({"Categoria": list(data_cat.keys()), "Quantidade": list(data_cat.values())})
+            fig_cat = px.pie(df_cat, names='Categoria', values='Quantidade',
+                            color='Categoria', color_discrete_sequence=px.colors.qualitative.Pastel,
+                            title="Distribuição de Itens por Categoria")
+            fig_cat.update_traces(textinfo='percent+label')
+            fig_cat.update_layout(height=500, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+            st.plotly_chart(fig_cat, use_container_width=True)
+        else:
+            st.info("Nenhuma categoria encontrada.")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Erro ao carregar categorias: {e}")
+
+    try:
+        resp_acc = requests.get(f"{API}/acuracia", timeout=12)
+        resp_acc.raise_for_status()
+        data_acc = resp_acc.json()
+        usuarios = data_acc.get("usuarios", [])
+
+        usuarios_validos = [u for u in usuarios if u.get("acuracia") is not None]
+        if usuarios_validos:
+            df_acc = pd.DataFrame([
+                {"Usuário": u["usuario_id"], "Acurácia": u["acuracia"]}
+                for u in usuarios_validos
+            ])
+            fig_acc = px.bar(df_acc, x='Usuário', y='Acurácia',
+                            text='Acurácia',
+                            color='Acurácia', color_continuous_scale='greens',
+                            title="Acurácia por Usuário")
+            fig_acc.update_layout(yaxis=dict(range=[0,1]), height=500, paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)')
+            fig_acc.update_traces(texttemplate='%{text:.2f}', textposition='outside')
+            st.plotly_chart(fig_acc, use_container_width=True)
+
+            media_acc = df_acc['Acurácia'].mean()
+            st.markdown(
+                f"📊 Usuários com acurácia maior que a média ({media_acc:.2f}) têm histórico mais consistente. "
+                f"Usuários com acurácia menor geralmente têm menos avaliações ou preferências mais variadas."
+            )
+        else:
+            st.info("Nenhum usuário com acurácia calculada.")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Erro ao carregar acurácia: {e}")
 
 st.markdown("---")
 st.markdown(
-    "<p style='text-align:center;color:gray'>Projeto de Sistema de Recomendação – Manaus Explorer 🌴</p>",
+    """
+    <div style="text-align:center;color:gray;">
+        <p><b>Manaus Explorer 🌴</b> — Sistema de Recomendação de Experiências Locais</p>
+        <p>Feito com ❤️ usando Streamlit, Folium e Plotly</p>
+    </div>
+    """,
     unsafe_allow_html=True,
 )

@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import os
 import math
+from collections import Counter
 
 app = FastAPI()
 
@@ -287,3 +288,8 @@ def calculo_acuracia():
         "total_usuarios": len(user_ids),
         "usuarios": usuarios_fmt
     }
+
+@app.get("/categorias")
+def get_categorias():
+    contagem = Counter(itens["categoria"].dropna())
+    return dict(contagem)
