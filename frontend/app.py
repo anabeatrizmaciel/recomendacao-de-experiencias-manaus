@@ -7,9 +7,8 @@ from folium.plugins import MeasureControl
 import plotly.express as px
 
 st.set_page_config(page_title="Manaus Explorer", page_icon="🌴", layout="wide")
-API = "http://127.0.0.1:8000"
+API = "https://recomendacao-de-experiencias-manaus.onrender.com/"
 
-# ------------------- CSS customizado -------------------
 st.markdown(
     """
     <style>
